@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import HackerNewsContainer from './Containers/HackerNewsContainer'
+import HackerNewsContainer from './Containers/HackerNewsContainerCopy'
 
 function App() {
   return (

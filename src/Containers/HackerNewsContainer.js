@@ -1,41 +1,45 @@
-import React, {useState, useEffect} from 'react';
-import NewsList from '../Components/NewsList'
+import React, { useState, useEffect } from 'react';
+import NewsList from '../Components/NewsList';
+// import Filter from '../components/Filter';
 
-
-const HackerNewsContainer = () => {
-
-    const [HackerNews, setHackerNews] = useState([]);
-
-    useEffect(() =>{
-        getHackerNews();
-    }, []);
-
-    const getHackerNews = function () {
-        fetch('https://hacker-news.firebaseio.com/v0/topstories.json')
-        .then(NewsIds => NewsIds.json())
-        .then(HackerNewsArray => setHackerNews(HackerNewsArray));
-        
-    };
-    // console.log(HackerNews)
-
-    const PromiseList = HackerNews.map((promise) => {
-        return fetch(`https://hacker-news.firebaseio.com/v0/item/${promise}.json`)
-        .then(thing => thing.json())
+function HackerNewsContainer() {
+  const [stories, setStories] = useState([]);
+  const [filteredStories, setFilteredStories] = useState([]);
+  useEffect(() => {
+    fetch("https://hacker-news.firebaseio.com/v0/topstories.json")
+      .then(res => res.json())
+      .then((data) => {
+        const newData = data.slice(0, 20);
+        const promises = newData.map((id) => {
+          return fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`)
+            .then(res => res.json());
+        });
+        Promise.all(promises)
+          .then((results) => {
+            setStories(results);
+            setFilteredStories(results);
+          }); console.log(stories)
+      });
+  }, []);
+  const filter = (searchTerm) => {
+    const lowerSearch = searchTerm.toLowerCase();
+    const filteredStories = stories.filter((story) => {
+      return story.title.toLowerCase().indexOf(lowerSearch) > -1;
     });
-    const test = Promise.all(PromiseList)
-    console.log(test)
-    console.log(PromiseList[0])
-    // const test = PromiseList.then(thing => thing.json())
-
-    // console.log(test[0].title)
-
-    // const test = fetch("https://hacker-news.firebaseio.com/v0/item/27139363.json")
-
-
-    
-    return (
-        <NewsList />
-    );
-};
+    setFilteredStories(filteredStories);
+  }
+  return (
+    <>
+      {/* <Filter handleChange={filter} /> */}
+      {/* <StoryList stories={filteredStories} /> */}
+      <h1>Worst Day Ever</h1>
+      <h3>I want a blanket</h3>
+      <h5>please</h5>
+      <h6>FML!</h6>
+      <NewsList stories={stories}/>
+    </>
+  )
+}
+// export default StoryContainer;
 
 export default HackerNewsContainer

@@ -1,12 +1,16 @@
 import React from 'react';
 import NewsItem from './NewsItem';
 
-const NewsList = () => {
+const NewsListContent = ({stories}) => {
+    
+    const NewsItems = stories.map((story, index) => {
+        return <NewsItem story = {story} key= {index}/>
+    });
 
     return (
-        <NewsItem/>
+        <ul>{NewsItems}</ul>
     );
 
 };
 
-export default NewsList;
+export default NewsListContent;

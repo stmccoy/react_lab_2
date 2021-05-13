@@ -1,10 +1,9 @@
 import React from 'react';
 
-const NewsItem = () => {
+const NewsItem = ({story}) => {
 
-    return(
-        <p>This is a news item</p>
-    );
+    return<li>{story.title}</li>
+
 
 };
 
